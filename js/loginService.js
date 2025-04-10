@@ -5,25 +5,36 @@ document.getElementById("formLogin").addEventListener('submit', function (e){
 
     let message = ''
     let alerType=''
-    if(email === "" || password === ""){
-        alerType ='warning'
-        message='Por favor completa todos los campos'
-    }
-    else if (email === 'prueba@gmail.com' && password === '112345678'){
-        alerType= 'success'
+    login (email, password)
+   
+})
+
+function login(email, password){
+    fetch("htpps://reqres.in/api/login", {
+        method: "POST", 
+        headers: {
+            "Content-type": "application/json"
+        },
+        body: JSON.stringify({ email, password})
+    })
+    .then((data)=>{
+          alerType= 'success'
         message= 'inicio de secion exitoso'
+        console.log('responde bien' + data)
     }
-    else{
+        
+    )
+    .catch((error)=>{
         alerType= 'danger'
         message= 'Correo o contraseña incorrectos.';
-    }
-
+        console.error(error)
+    })
     let alert =`
-     <div class="alert alert-${alerType} alert-dismissible fade show" role="alert">
-        ${message}
-       
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-     </div>
-    `;
-    document.getElementById('alert').innerHTML= alert;
-})
+    <div class="alert alert-${alerType} alert-dismissible fade show" role="alert">
+       ${message}
+      
+       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+   `;
+   document.getElementById('alert').innerHTML= alert;
+}

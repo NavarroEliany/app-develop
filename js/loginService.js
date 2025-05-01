@@ -10,17 +10,33 @@ document.getElementById("formLogin").addEventListener('submit', function (e){
 })
 
 function login(email, password){
-    fetch("htpps://reqres.in/api/login", {
+    let message=''
+    let alertType=''
+    localStorage.removeItem('token')
+    fetch("https://reqres.in/api/login", {
         method: "POST", 
         headers: {
-            "Content-type": "application/json"
+            "Content-type": "application/json",
+            'x-api-key':' reqres-free-v1'
         },
         body: JSON.stringify({ email, password})
     })
-    .then((data)=>{
+    .then((response)=>{
+        if(response.status ===200){
           alerType= 'success'
         message= 'inicio de secion exitoso'
-        console.log('responde bien' + data)
+        console.log('responde bien' + response)
+        alertBuilder(alerType, message)
+        localStorage.setItem('tiken', 'sassddee')
+        setTimeout(()=>{
+        location.href = 'admin/dashboard.html'
+        }, 2000) //2000 ms = 2s
+    }
+    else{
+        alertType = 'danger'
+        message = 'Correo o contraseñas incorrectas'
+        alertBuilder(alerType, message)
+    }
     }
         
     )
@@ -28,8 +44,13 @@ function login(email, password){
         alerType= 'danger'
         message= 'Correo o contraseña incorrectos.';
         console.error(error)
+        alertBuilder(alerType, message)
     })
-    let alert =`
+    
+}
+
+function alertBuilder (alertType, message){
+    const alert =`
     <div class="alert alert-${alerType} alert-dismissible fade show" role="alert">
        ${message}
       
